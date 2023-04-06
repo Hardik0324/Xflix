@@ -76,7 +76,7 @@ function Genre({genres, contentRating, setVideos}){
           <Chip label={item} key={item} className="genre-btn" onClick={() => genreChange(item)}/>
         ))}
         <div className="sort">
-        <Sort/>
+        <Sort setVideos={setVideos}/>
         </div>
       </Stack>
       <Stack className="stack2" direction="row" justifyContent="center" spacing={4} sx={{ my: 2 }}>
