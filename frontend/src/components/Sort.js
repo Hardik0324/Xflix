@@ -21,20 +21,20 @@ function Sort({setVideos}){
     }
 
     return(
-      <Select
+      <select
         value={sort}
         className="sort-select"
         // startDecorator={<ImportExportIcon color="white" />}
         onChange={(e) => handleChange(e)}
         sx={{ height: 35, width: 180, borderRadius: 6 }}
       >
-        <MenuItem value="releaseDate" id="release-date-option">
+        <option value="releaseDate" id="release-date-option">
           Sort By: Release Date
-        </MenuItem>
-        <MenuItem value="viewCount" id="view-count-option">
-          Sort By: View Count
-        </MenuItem>
-      </Select>
+        </option>
+        <option value="viewCount" id="view-count-option">
+          View Count
+        </option>
+      </select>
     )
 }
 

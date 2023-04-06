@@ -1,322 +1,238 @@
-import React, { useState } from "react";
-import { Button, Box, Modal, Typography, TextField } from "@mui/material";
-import UploadIcon from "@mui/icons-material/Upload";
-import FormControl from "@mui/material/FormControl";
-import Select from "@mui/material/Select";
-import InputLabel from "@mui/material/InputLabel";
-import MenuItem from "@mui/material/MenuItem";
-import OutlinedInput from "@mui/material/OutlinedInput";
-import InputAdornment from "@mui/material/InputAdornment";
-import IconButton from "@mui/material/IconButton";
-import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
-import axios from 'axios';
-import {config} from '../App';
-import "./Upload.css"
-
-const style = {
-  position: "absolute",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
-  width: 400,
-  bgcolor: "background.paper",
-  border: "2px solid #000",
-  boxShadow: 24,
-  p: 4,
-};
+import { React, useState } from "react";
+import Button from "@mui/material/Button";
+import UploadIcon from '@mui/icons-material/Upload';
+import TextField from '@mui/material/TextField';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogTitle from '@mui/material/DialogTitle';
+import CloseIcon from '@mui/icons-material/Close';
+import MenuItem from '@mui/material/MenuItem';
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import { config } from "../App";
+import axios from "axios";
+// import { useSnackbar } from 'notistack';
+import "./Upload.css";
 
 const Upload = () => {
-  const [open, setOpen] = useState(false);
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
-  
-  const [showDate, setShowDate] = useState(true);
-  const [formData, setFormData] = useState({
-    videoLink: "",
-    title: "",
-    genre: "",
-    contentRating: "",
-    releaseDate: "",
-    previewImage: "",
-  });
+    // const { enqueueSnackbar } = useSnackbar();
 
-  let handleChange = (e) => {
-    let [key, value] = [e.target.id, e.target.value];
-    // console.log(key, value);
-    setFormData({ ...formData, [key]: value });
-  };
+    const allGenres = [
+        {label: "Education", value:"Education"},
+        {label: "Sports", value: "Sports"},
+        {label: "Comedy", value: "Comedy"},
+        {label: "Lifestyle", value: "Lifestyle"}
+    ];
 
-  let handleGenreChange = (e) => {
-    let [key, value] = ["genre", e.target.value];
-    // console.log(key, value);
-    setFormData({ ...formData, [key]: value });
-  };
+    const allAges = [
+        {label: "7+", value:"7"},
+        {label: "12+", value: "12"},
+        {label: "16+", value: "16"},
+        {label: "18+", value: "18"}
+      ];
 
-  let handleAgeChange = (e) => {
-    let [key, value] = ["contentRating", e.target.value];
-    // console.log(key, value);
-    setFormData({ ...formData, [key]: value });
-  };
+    const [openDialog, setOpenDialog] = useState(false);
+    const [dateValue, setDateValue] = useState(new Date());
+    const [genre, setGenre] = useState("");
+    const [age, setAge] = useState("");
+    const [videoPostData, setVideoPostData] = useState({
+        videoLink: "",
+        previewImage: "",
+        title: "",
+        genre: "",
+        contentRating: "",
+        releaseDate: dateValue,
+    });
 
-  let handleDateChange = (e) => {
-    let date = new Date(e.target.value).toUTCString();
-    // console.log(date);
-    const dateArray = date.split(' ');
-    const datestr = dateArray[1]+" "+ dateArray[2] +" "+ dateArray[3];
-    let [key, value] = ['releaseDate', datestr];
-    setFormData({...formData, [key]:value})
-  };
+    const handleClickUpload = () => {
+        setOpenDialog(true);
+    };
 
-  let handleSubmit = async ()=>{
-    try{
-    // console.log(formData);
-    // console.log(`${config.endpoint}/videos`);
-    const res = await axios.post(`${config.endpoint}/videos`, formData);
-    console.log(res);
-    setOpen(false);
-    } catch(err){
-      console.log(err)
+    const handleClose = () => {
+        setOpenDialog(false);
+    };
+
+    const handleLink = (link) => {
+        if(link === '') {
+            setVideoPostData({ ...videoPostData, videoLink: '' });
+        }
+        else {
+            let urlLink = new URL(link);
+            console.log(urlLink);
+            let videoParam = urlLink.searchParams.get("v");
+            console.log(videoParam);
+            const finalVideoLink = `youtube.com/embed/${videoParam}`;
+            setVideoPostData({ ...videoPostData, videoLink: finalVideoLink });
+        }
     }
 
-  }
+    const handleGenreChange = (event) => {
+        setGenre(event.target.value);
+        setVideoPostData({ ...videoPostData, genre: event.target.value })
+    };
+    
+    const handleAgeChange = (event) => {
+        setAge(event.target.value);
+        setVideoPostData({ ...videoPostData, contentRating: event.target.value })
+    };
 
-  return (
-    <Box>
-      <Button
-        variant="contained"
-        color="primary"
-        sx={{ color: "#FFFFFF", bgcolor: "#4CA3FC" }}
-        startIcon={<UploadIcon />}
-        onClick={handleOpen}
-      >
-        Upload
-      </Button>
-      <Modal
-        open={open}
-        onClose={handleClose}
-        aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description"
-      >
-        <Box
-          style={style}
-          sx={{
-            bgcolor: "background.paper",
-          }}
-          className="moda"
-        >
-          <div className="headx">
-          <Typography variant="h6" className="modtext1">Upload Video</Typography>
-          <Typography
-              id="modal-modal-title"
-              variant="body1"
-              component="h4"
-              sx={{ color: "white", margin: "10px 15px 15px 0"}}
-              onClick={handleClose}
-            >
-              X
-            </Typography>
-            </div>
-          <Box className="moda1">
-            <TextField
-              id="videoLink"
-              value={formData.videoLink}
-              label="Video Link"
-              variant="outlined"
-              className="modtext"
-              onChange={(e) => handleChange(e)}
-            />
-            <Typography
-              variant="caption"
-              display="block"
-              gutterBottom
-              sx={{ margin: "5px 0 20px 10px" }}
-              className="modtext4"
-            >
-              This link will be used to derive the video
-            </Typography>
-            <TextField
-              id="previewImage"
-              value={formData.previewImage}
-              label="Thumbnail Image Link"
-              variant="outlined"
-              className="modtext"
-              onChange={(e) => handleChange(e)}
-            />
-            <Typography
-              variant="caption"
-              display="block"
-              gutterBottom
-              sx={{ margin: "5px 0 20px 10px" }}
-              className="modtext4"
-            >
-              This link will be used to preview the thumbnail image
-            </Typography>
-            <TextField id="title" value={formData.title} label="Title" variant="outlined" className="modtext" onChange={(e) => handleChange(e)}/>
-          <Typography
-            variant="caption"
-            display="block"
-            gutterBottom
-            sx={{ margin: "5px 0 20px 10px" }}
-            className="modtext4"
-          >
-            The title will be the representative text for video
-          </Typography>
-            <FormControl
-            fullWidth
-            // sx={{ border: "1px solid white", borderRadius: "5px" }}
-            className="modtext"
-          >
-            <InputLabel
-              id="demo-simple-select-label"
-              sx={{ color: "white" }}
-            >
-              Genre
-            </InputLabel>
-            <Select
-              labelId="demo-simple-select-label"
-              id="genre"
-              value={formData.genre}
-              label="Genre"
-              onChange={(e) => handleGenreChange(e)}
-              sx={{
-                ".MuiSvgIcon-root ": {
-                  fill: "white !important",
-                },
-                ".MuiSelect-select": {
-                  color: "white !important",
-                },
-              }}
-              inputProps={{
-                MenuProps: {
-                  MenuListProps: {
-                    sx: {
-                      backgroundColor: "#3b3b3b",
-                      color: "white",
+    const handleDateChange = (newValue) => {
+        console.log("newvalue :", newValue);
+        setDateValue(newValue);
+
+        const years = [
+            "Jan",
+            "Feb",
+            "Mar",
+            "Apr",
+            "May",
+            "June",
+            "July",
+            "Aug",
+            "Sep",
+            "Oct",
+            "Nov",
+            "Dec",
+        ]
+
+        const date = newValue.getDate();
+
+        const month = years[newValue.getMonth()];
+
+        const fullYear = newValue.getFullYear();
+
+        let dateString = date + " " + month + " " + fullYear;
+
+        setVideoPostData({ ...videoPostData, releaseDate: dateString });
+    };
+
+    const handleUploadVideo = async () => {
+        const data = videoPostData;
+        if (
+            data.videoLink &&
+            data.title &&
+            data.genre &&
+            data.contentRating &&
+            data.releaseDate &&
+            data.previewImage
+        ) {
+            try {
+                const response = await axios.post(`${config.endpoint}/videos`, data, {
+                    headers: {
+                        "Content-Type": "application/json",
                     },
-                  },
-                },
-              }}
+                });
+                handleClose();
+                alert("Uploaded Successfully");
+            } catch (error) {
+                alert(error.response.data.message);
+            }
+        } else if (!data.videoLink) {
+            alert("Link must be a valid url");
+        } else {
+            alert("All fields are required");
+        }
+    };
+
+    return (
+        <>
+            <Button
+                id="upload-btn"
+                className="upload-button"
+                startIcon={<UploadIcon />}
+                variant="contained"
+                onClick={handleClickUpload}
             >
-              <MenuItem value="Education">Education</MenuItem>
-              <MenuItem value="Sports">Sports</MenuItem>
-              <MenuItem value="Comedy">Comedy</MenuItem>
-              <MenuItem value="Lifestyle">Lifestyle</MenuItem>
-            </Select>
-          </FormControl>
-          <Typography
-            variant="caption"
-            display="block"
-            gutterBottom
-            sx={{ margin: "5px 0 20px 10px" }}
-            className="modtext4"
-          >
-            Genre will help in categorizing your videos
-          </Typography>
-          <FormControl
-            fullWidth
-            className="modtext"
-          >
-            <InputLabel
-              id="demo-simple-select-label"
-              sx={{ color: "white" }}
-            >
-              Suitable age group for the clip
-            </InputLabel>
-            <Select
-              labelId="demo-simple-select-label"
-              id="Age"
-              value={formData.contentRating}
-              label="Age"
-              onChange={(e) => handleAgeChange(e)}
-              sx={{
-                ".MuiSvgIcon-root ": {
-                  fill: "white !important",
-                },
-                ".MuiSelect-select": {
-                  color: "white !important",
-                },
-              }}
-              inputProps={{
-                MenuProps: {
-                  MenuListProps: {
-                    sx: {
-                      backgroundColor: "#3b3b3b",
-                      color: "white",
-                    },
-                  },
-                },
-              }}
-            >
-              <MenuItem value="7+">7+</MenuItem>
-              <MenuItem value="12+">12+</MenuItem>
-              <MenuItem value="16+">16+</MenuItem>
-              <MenuItem value="18+">18+</MenuItem>
-            </Select>
-          </FormControl>
-          <Typography
-            variant="caption"
-            display="block"
-            gutterBottom
-            sx={{ margin: "5px 0 20px 10px" }}
-            className="modtext4"
-          >
-            This will be used to filter videos on age group suitability
-          </Typography>
-          <FormControl
-            fullWidth
-            variant="outlined"
-            className="modtext"
-          >
-            <InputLabel
-              htmlFor="outlined-adornment-password"
-              sx={{ color: "#FFFFFF99" }}
-            >
-              Release Date
-            </InputLabel>
-            <OutlinedInput
-              id="releaseDate"
-              type={showDate ? "text" : "date"}
-              onFocus={() => setShowDate(false)}
-              onBlur={() => setShowDate(true)}
-              color="secondary"
-              onChange={(e) => handleDateChange(e)}
-              sx={{ input: { color: "#FFFFFF99" } }}
-              InputProps={{
-                style: { color: "#fff" },
-              }}
-              endAdornment={
-                <InputAdornment position="end">
-                  <IconButton
-                    aria-label="toggle password visibility"
-                    edge="end"
-                    size="small"
-                    sx={{ color: "#FFFFFF99" }}
-                  >
-                    {showDate ? <CalendarTodayIcon /> : null}
-                  </IconButton>
-                </InputAdornment>
-              }
-              label="date"
-            />
-          </FormControl>
-          <Typography
-            variant="caption"
-            display="block"
-            gutterBottom
-            sx={{ margin: "5px 0 20px 10px" }}
-            className="modtext4"
-          >
-            This will be used to sort videos
-          </Typography>
-          </Box>
-          <Box className="moda2">
-            <button className="modbut" onClick={()=>handleSubmit()}>UPLOAD VIDEO</button>
-            <button className="modbut" onClick={handleClose}>Cancel</button>
-          </Box>
-        </Box>
-      </Modal>
-    </Box>
-  );
+                Upload
+            </Button>
+            <Dialog className="UploadPage-dialog" open={openDialog} onClose={handleClose}>
+                <div className="UploadPage-header">
+                    <DialogTitle>Upload Video</DialogTitle>
+                    <CloseIcon className="closeIcon" onClick={handleClose} />
+                </div>
+                <DialogContent>
+                    <TextField
+                        fullWidth
+                        className="formInput"
+                        id="videoLink"
+                        label="Video Link"
+                        helperText="This link will be used to derive the video"
+                        onChange={(e) => handleLink(e.target.value)}
+                    />
+                    <TextField
+                        fullWidth
+                        className="formInput"
+                        id="imageLink"
+                        label="Thumbnail Image Link"
+                        helperText="This link will be used to preview the Thumbnail Image"
+                        onChange={(e) =>
+                            setVideoPostData({ ...videoPostData, previewImage: e.target.value })
+                        }
+                    />
+                    <TextField
+                        fullWidth
+                        className="formInput"
+                        id="title"
+                        label="Title"
+                        helperText="The title will be the representative text for video"
+                        onChange={(e) =>
+                            setVideoPostData({ ...videoPostData, title: e.target.value })
+                        }
+                    />
+                    <TextField
+                        fullWidth
+                        className="formInput"
+                        id="genre"
+                        select
+                        label="Genre"
+                        value={genre}
+                        onChange={(e) => handleGenreChange(e)}
+                        helperText="Genre will help you in categorizing your videos"
+                        >
+                            {allGenres.map((option) => (
+                                <MenuItem key={option.value} value={option.value}>
+                                    {option.label}
+                                </MenuItem>
+                            ))}
+                    </TextField>
+                    <TextField
+                        fullWidth
+                        className="formInput"
+                        id="age"
+                        select
+                        label="Suitable age group for the clip"
+                        value={age}
+                        onChange={(e) => handleAgeChange(e)}
+                        helperText="This will be used to filter videos on age group suitability"
+                        >
+                            {allAges.map((option) => (
+                                <MenuItem key={option.value} value={option.value}>
+                                    {option.label}
+                                </MenuItem>
+                            ))}
+                    </TextField>
+                    <LocalizationProvider dateAdapter={AdapterDateFns}>
+                        <DatePicker
+                            label="Release Date"
+                            inputFormat="dd/MM/yyyy"
+                            value={dateValue}
+                            onChange={(newValue) => {
+                            handleDateChange(newValue);
+                            }}
+                            renderInput={(params) => <TextField {...params} />}
+                            helperText="This will be used to sort videos"
+                        />
+                    </LocalizationProvider>
+                </DialogContent>
+                <DialogActions className="DialogModal-buttons">
+                    <Button id="upload-btn-submit" className="uploadVideo-btn" onClick={handleUploadVideo}>Upload Video</Button>
+                    <Button id="upload-btn-cancel" onClick={handleClose}>Cancel</Button>
+                </DialogActions>
+            </Dialog>
+        </>
+    );
 };
 
 export default Upload;

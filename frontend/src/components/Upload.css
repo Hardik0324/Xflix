@@ -1,59 +1,37 @@
-.modtext label{
-    color: white;
+.UploadPage-dialog {
+    height: auto;
+    width: auto;
 }
 
-.modtext div input{
-    color: white;
+.UploadPage-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
-.modtext{
-    border: 1px solid white;
-    width: 80%;
+.closeIcon {
+    margin-right: 1rem;
 }
 
-.modtext1{
-    color: white;
-    margin-left: 15px;
-    margin-bottom: 15px;
-    margin-top: 10px;
+.closeIcon:hover {
+    cursor: pointer;
 }
 
-.moda{
-    background-color: black;
-}
-
-.moda1{
+.uploadPage-content {
     display: flex;
     flex-direction: column;
-    align-items: center;
     justify-content: space-between;
 }
 
-.modbut{
-    background-color: red;
-    color: white;
-    margin: 10px;
-    padding: 5px;
+.DialogModal-buttons {
+    display: flex !important;
+    justify-content: flex-start !important;
 }
 
-.modtext2{
-    color: white;
-    margin: 10px;
-    padding: 5px;
+.uploadVideo-btn {
+    background-color: rgb(191, 0, 0) !important;
 }
 
-.moda2{
-    display: flex;
-    flex-direction: row;
-    justify-content: start;
+.formInput {
+    margin-top: 1rem !important;
 }
-
-.modtext4{
-    color: white;
-}
-
-.headx{
-    display: flex;
-    justify-content: space-between;
-}
-
