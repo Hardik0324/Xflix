@@ -311,7 +311,7 @@ const Upload = () => {
           </Box>
           <Box className="moda2">
             <button className="modbut" onClick={()=>handleSubmit()}>UPLOAD VIDEO</button>
-            <Typography className="modtext2" onClick={handleClose}>Cancel</Typography>
+            <button className="modbut" onClick={handleClose}>Cancel</button>
           </Box>
         </Box>
       </Modal>
