@@ -1,0 +1,59 @@
+.modtext label{
+    color: white;
+}
+
+.modtext div input{
+    color: white;
+}
+
+.modtext{
+    border: 1px solid white;
+    width: 80%;
+}
+
+.modtext1{
+    color: white;
+    margin-left: 15px;
+    margin-bottom: 15px;
+    margin-top: 10px;
+}
+
+.moda{
+    background-color: black;
+}
+
+.moda1{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.modbut{
+    background-color: red;
+    color: white;
+    margin: 10px;
+    padding: 5px;
+}
+
+.modtext2{
+    color: white;
+    margin: 10px;
+    padding: 5px;
+}
+
+.moda2{
+    display: flex;
+    flex-direction: row;
+    justify-content: start;
+}
+
+.modtext4{
+    color: white;
+}
+
+.headx{
+    display: flex;
+    justify-content: space-between;
+}
+

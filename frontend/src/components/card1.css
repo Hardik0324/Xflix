@@ -1,0 +1,23 @@
+.video-tile{
+    height: 100%;
+    width: 100%;
+}
+
+.cardimg{
+    height: 45%;
+    width: 100%;
+}
+
+.carddisp{
+    background-color: rgb(45, 43, 43);
+}
+
+.carddes{
+    background-color: black;
+    height: 55%;
+    width: 100%;
+}
+
+.carddes div, .carddes p{
+    color: white;
+}

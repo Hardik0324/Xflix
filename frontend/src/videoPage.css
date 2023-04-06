@@ -1,0 +1,12 @@
+.video{
+    margin: 25px;
+    border-radius: 8px;
+}
+
+.videodisp{
+    background-color: rgb(45, 43, 43);
+}
+
+.vidtex{
+    color: white;
+}

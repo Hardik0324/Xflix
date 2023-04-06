@@ -1,0 +1,40 @@
+.sort{
+    padding-left: 2vw;
+}
+
+.stack1{
+    padding-left: 8vw;
+    margin-bottom: 16px;
+}
+
+.stack2{
+    padding-bottom: 16px;
+}
+
+.gen{
+    background-color: rgb(73, 71, 71);
+}
+
+.genre-btn span{
+    color: white;
+}
+
+.genre-btn:hover{
+    background-color: white !important;
+}
+
+.genre-btn:hover span{
+    color: black;
+}
+
+.content-rating-btn span{
+    color: white;
+}
+
+.content-rating-btn:hover{
+    background-color: white;
+}
+
+.content-rating-btn:hover span{
+    color: black;
+}
